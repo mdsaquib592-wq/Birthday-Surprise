@@ -18,7 +18,7 @@ export default function MemoriesPage() {
       src: "/images/photo2.jpg",
       fallback:
         "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80",
-      date: "05 September",
+      date: "05 November",
       caption: "Celebrating the queen who rules my heart.",
     },
     {

@@ -156,7 +156,7 @@ export default function TimelinePage() {
             <Cake className="w-4 h-4" />
             {birthStats.isBirthdayToday ? (
               <span>
-                🎉 Today is 05 September — Happy Birthday My Queen Neha! 🎂
+                🎉 Today is 05 November — Happy Birthday My Queen Neha! 🎂
               </span>
             ) : (
               <span>

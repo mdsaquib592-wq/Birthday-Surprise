@@ -497,7 +497,7 @@ export default function CakePage() {
                   </h3>
 
                   <p className="text-slate-200 text-sm sm:text-base leading-relaxed">
-                    Aaj <strong>05 September</strong> hai — wo sabse khoobsurat
+                    Aaj <strong>05 November</strong> hai — wo sabse khoobsurat
                     din jab meri duniya me sabse pyaari insaan aayi. 28 July
                     2019 se lekar aaj tak, tumhari har ek muskurahat mere dil ki
                     sabse badi khushi rahi hai.

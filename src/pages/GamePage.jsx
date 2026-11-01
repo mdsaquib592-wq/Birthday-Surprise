@@ -107,7 +107,7 @@ export default function GamePage() {
     ctx.fillStyle = "#fde047";
     ctx.font = "bold 25px sans-serif";
     ctx.fillText(
-      "Born: 05 Sep 2002   |   Saquib & Neha Since: 28 July 2019",
+      "Born: 05 Nov 2002   |   Saquib & Neha Since: 28 July 2019",
       540,
       295,
     );
