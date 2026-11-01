@@ -1,5 +1,13 @@
 import React from "react";
-import { Heart, Sparkles, Calendar, ArrowRight, Gem } from "lucide-react";
+import {
+  Heart,
+  Sparkles,
+  Calendar,
+  ArrowRight,
+  Gem,
+  Cake,
+  Scroll,
+} from "lucide-react";
 import confetti from "canvas-confetti";
 
 export default function HomePage({ setCurrentPage }) {
@@ -39,23 +47,31 @@ export default function HomePage({ setCurrentPage }) {
           </p>
 
           <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-200 text-sm italic">
-            "Right now you are my girlfriend, in my heart you are already my
-            wife, and very soon—with your parents' blessings—you will be my
-            forever bride."
+            &ldquo;Right now you are my girlfriend, in my heart you are already
+            my wife, and very soon—with your parents&apos; blessings—you will be
+            my forever bride.&rdquo;
           </div>
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
             <button
               onClick={triggerShower}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white font-semibold flex items-center gap-2 shadow-lg shadow-rose-500/30 hover:scale-105 transition"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white font-semibold flex items-center gap-2 shadow-lg shadow-rose-500/30 hover:scale-105 transition cursor-pointer"
             >
               <Heart className="w-5 h-5 fill-white" />
               Shower Neha With Love
             </button>
 
             <button
+              onClick={() => setCurrentPage("cake")}
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-rose-500 text-slate-950 font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition cursor-pointer"
+            >
+              <Cake className="w-4 h-4" />
+              Cut Birthday Cake 🎂
+            </button>
+
+            <button
               onClick={() => setCurrentPage("promise")}
-              className="px-6 py-3 rounded-xl glass-card border border-cyan-400/40 text-cyan-300 font-semibold flex items-center gap-2 hover:bg-cyan-500/10 transition"
+              className="px-6 py-3 rounded-xl glass-card border border-cyan-400/40 text-cyan-300 font-semibold flex items-center gap-2 hover:bg-cyan-500/10 transition cursor-pointer"
             >
               <Gem className="w-4 h-4" />
               Our Marriage Promise
@@ -98,44 +114,56 @@ export default function HomePage({ setCurrentPage }) {
             <p className="text-center font-romantic text-lg text-cyan-300 mt-2">
               Birthday Queen ✨
             </p>
-            <p className="text-center font-romantic text-lg text-cyan-300 mt-2">
+            <p className="text-center font-romantic text-sm text-amber-300 font-bold tracking-wider">
               NEHA PRAVEEN ❤️
             </p>
           </div>
         </div>
       </div>
 
-      {/* Quick Surprise Cards */}
-      <div className="grid sm:grid-cols-3 gap-4 pt-4">
+      {/* Quick Surprise Cards in exact flow order */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
         <div
           onClick={() => setCurrentPage("timeline")}
-          className="glass-card p-5 rounded-2xl cursor-pointer hover:border-cyan-400/50 transition"
+          className="glass-card p-5 rounded-2xl cursor-pointer hover:border-cyan-400/50 transition group"
         >
-          <Calendar className="w-6 h-6 text-cyan-400 mb-2" />
-          <h3 className="font-semibold text-lg">Every Second Since 2019</h3>
+          <Calendar className="w-6 h-6 text-cyan-400 mb-2 group-hover:scale-110 transition" />
+          <h3 className="font-semibold text-base">1. Our Live Clock ⏳</h3>
           <p className="text-xs text-slate-400 mt-1">
-            Watch our live clock tick from 28 July 2019 toward our future
-            wedding.
+            Watch our love tick every second since 28 July 2019.
           </p>
         </div>
+
         <div
-          onClick={() => setCurrentPage("game")}
-          className="glass-card p-5 rounded-2xl cursor-pointer hover:border-rose-400/50 transition"
+          onClick={() => setCurrentPage("cake")}
+          className="glass-card p-5 rounded-2xl cursor-pointer hover:border-amber-400/50 transition group"
         >
-          <Heart className="w-6 h-6 text-rose-400 mb-2" />
-          <h3 className="font-semibold text-lg">Play Love Catch Game ❤️</h3>
+          <Cake className="w-6 h-6 text-amber-400 mb-2 group-hover:scale-110 transition" />
+          <h3 className="font-semibold text-base">2. Birthday Cake 🎂</h3>
           <p className="text-xs text-slate-400 mt-1">
-            Catch falling hearts & kisses to unlock a surprise love message!
+            Blow the candles, cut your 3D cake &amp; send your wish to Saquib!
           </p>
         </div>
+
         <div
           onClick={() => setCurrentPage("letters")}
-          className="glass-card p-5 rounded-2xl cursor-pointer hover:border-amber-400/50 transition"
+          className="glass-card p-5 rounded-2xl cursor-pointer hover:border-rose-400/50 transition group"
         >
-          <Sparkles className="w-6 h-6 text-amber-400 mb-2" />
-          <h3 className="font-semibold text-lg">Secret Love Letters</h3>
+          <Scroll className="w-6 h-6 text-rose-400 mb-2 group-hover:scale-110 transition" />
+          <h3 className="font-semibold text-base">3. Royal Scrolls 📜</h3>
           <p className="text-xs text-slate-400 mt-1">
-            Open letters about 05 Sep 2002, 28 July 2019, and our future.
+            Unroll royal letters written secretly for your birthday.
+          </p>
+        </div>
+
+        <div
+          onClick={() => setCurrentPage("game")}
+          className="glass-card p-5 rounded-2xl cursor-pointer hover:border-pink-400/50 transition group"
+        >
+          <Heart className="w-6 h-6 text-pink-400 mb-2 group-hover:scale-110 transition" />
+          <h3 className="font-semibold text-base">4. Love Catch Game ❤️</h3>
+          <p className="text-xs text-slate-400 mt-1">
+            Catch 10 hearts to download a signed JPG Love Note!
           </p>
         </div>
       </div>

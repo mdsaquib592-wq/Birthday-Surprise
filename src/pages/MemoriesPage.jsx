@@ -1,7 +1,9 @@
-import React from "react";
-import { Heart } from "lucide-react";
+import React, { useState } from "react";
+import { Heart, X, ZoomIn } from "lucide-react";
 
 export default function MemoriesPage() {
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
   const photos = [
     {
       id: 1,
@@ -57,17 +59,20 @@ export default function MemoriesPage() {
     <div className="max-w-6xl mx-auto px-4 py-10 space-y-8">
       <div className="text-center space-y-2">
         <h2 className="font-romantic text-4xl sm:text-5xl text-cyan-400">
-          Our Polaroid Memories
+          Our Polaroid Memories 📸
         </h2>
+        <p className="text-slate-400 text-sm">
+          Tap any photo to view it up close
+        </p>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {photos.map((photo) => (
           <div
             key={photo.id}
-            className="glass-card p-4 rounded-3xl border border-white/10 hover:border-rose-500/40 transition group flex flex-col justify-between"
+            onClick={() => setSelectedPhoto(photo)}
+            className="glass-card p-4 rounded-3xl border border-white/10 hover:border-rose-500/50 transition group flex flex-col justify-between cursor-pointer"
           >
-            {/* Using object-contain and bg-black/40 so the full photo is shown without cropping */}
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-black/50 flex items-center justify-center p-1">
               <img
                 src={photo.src}
@@ -80,15 +85,60 @@ export default function MemoriesPage() {
               <span className="absolute top-3 left-3 bg-black/75 backdrop-blur-md text-cyan-300 text-xs px-3 py-1 rounded-full border border-cyan-400/30 z-10">
                 {photo.date}
               </span>
+              <div className="absolute bottom-3 right-3 bg-black/60 p-1.5 rounded-full text-white/70 opacity-0 group-hover:opacity-100 transition">
+                <ZoomIn className="w-4 h-4" />
+              </div>
             </div>
 
             <div className="pt-4 px-1 flex items-start justify-between gap-2">
-              <p className="text-sm text-slate-200 italic">"{photo.caption}"</p>
+              <p className="text-sm text-slate-200 italic">
+                &ldquo;{photo.caption}&rdquo;
+              </p>
               <Heart className="w-4 h-4 text-rose-500 fill-rose-500 shrink-0 mt-1" />
             </div>
           </div>
         ))}
       </div>
+
+      {/* Fullscreen Lightbox Modal */}
+      {selectedPhoto && (
+        <div
+          onClick={() => setSelectedPhoto(null)}
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="glass-card max-w-2xl w-full p-5 sm:p-6 rounded-3xl border border-rose-500/40 relative space-y-4 text-center"
+          >
+            <button
+              onClick={() => setSelectedPhoto(null)}
+              className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full transition cursor-pointer z-20"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="max-h-[70vh] rounded-2xl overflow-hidden bg-black/60 flex items-center justify-center">
+              <img
+                src={selectedPhoto.src}
+                alt={selectedPhoto.caption}
+                onError={(e) => {
+                  e.target.src = selectedPhoto.fallback;
+                }}
+                className="max-h-[68vh] w-auto object-contain rounded-xl"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <span className="text-xs font-semibold text-cyan-400 uppercase tracking-widest">
+                {selectedPhoto.date}
+              </span>
+              <p className="font-romantic text-2xl sm:text-3xl text-rose-300">
+                &ldquo;{selectedPhoto.caption}&rdquo;
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Sparkles, Heart, RefreshCw } from "lucide-react";
+import confetti from "canvas-confetti";
 
 export default function LoveJarPage() {
   const reasons = [
@@ -14,16 +15,27 @@ export default function LoveJarPage() {
   ];
 
   const [index, setIndex] = useState(0);
+  const [animating, setAnimating] = useState(false);
 
   const pickNextReason = () => {
-    setIndex((prev) => (prev + 1) % reasons.length);
+    setAnimating(true);
+    confetti({
+      particleCount: 35,
+      spread: 55,
+      origin: { y: 0.65 },
+      colors: ["#f43f5e", "#22d3ee", "#fde047"],
+    });
+    setTimeout(() => {
+      setIndex((prev) => (prev + 1) % reasons.length);
+      setAnimating(false);
+    }, 220);
   };
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 text-center space-y-8">
       <div className="space-y-2">
         <h2 className="font-romantic text-4xl sm:text-5xl text-rose-400">
-          The Jar of Endless Love
+          The Jar of Endless Love 🏺✨
         </h2>
         <p className="text-slate-400 text-sm">
           Tap the jar whenever you want to know why I am so crazy about you
@@ -31,7 +43,12 @@ export default function LoveJarPage() {
       </div>
 
       <div className="glass-card p-8 sm:p-12 rounded-3xl neon-cyan-glow border border-cyan-400/30 space-y-6">
-        <div className="w-20 h-20 mx-auto rounded-full bg-rose-500/20 border border-rose-400/40 flex items-center justify-center">
+        <div
+          onClick={pickNextReason}
+          className={`w-20 h-20 mx-auto rounded-full bg-rose-500/20 border border-rose-400/40 flex items-center justify-center cursor-pointer transition-transform ${
+            animating ? "scale-125 rotate-12" : "hover:scale-110"
+          }`}
+        >
           <Sparkles
             className="w-10 h-10 text-rose-400 animate-spin"
             style={{ animationDuration: "6s" }}
@@ -42,16 +59,20 @@ export default function LoveJarPage() {
           Love Note #{index + 1} of {reasons.length}
         </div>
 
-        <p className="font-romantic text-3xl sm:text-4xl text-white leading-relaxed min-h-[100px] flex items-center justify-center">
-          "{reasons[index]}"
+        <p
+          className={`font-romantic text-3xl sm:text-4xl text-white leading-relaxed min-h-[110px] flex items-center justify-center transition-all duration-200 ${
+            animating ? "opacity-0 scale-95" : "opacity-100 scale-100"
+          }`}
+        >
+          &ldquo;{reasons[index]}&rdquo;
         </p>
 
         <button
           onClick={pickNextReason}
-          className="px-8 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-semibold inline-flex items-center gap-2 shadow-lg shadow-rose-500/30 hover:scale-105 transition"
+          className="px-8 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-semibold inline-flex items-center gap-2 shadow-lg shadow-rose-500/30 hover:scale-105 transition cursor-pointer"
         >
-          <RefreshCw className="w-4 h-4" />
-          Pull Another Love Note
+          <RefreshCw className={`w-4 h-4 ${animating ? "animate-spin" : ""}`} />
+          Pull Another Love Note 💖
         </button>
       </div>
     </div>

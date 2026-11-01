@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Clock, Heart, Star, Sparkles } from "lucide-react";
+import { Heart, Sparkles, Cake } from "lucide-react";
 
 export default function TimelinePage() {
   const [loveTime, setLoveTime] = useState({
@@ -14,6 +14,7 @@ export default function TimelinePage() {
   const [birthStats, setBirthStats] = useState({
     totalDaysAlive: 0,
     nextBdayDays: 0,
+    isBirthdayToday: false,
   });
 
   useEffect(() => {
@@ -31,7 +32,13 @@ export default function TimelinePage() {
 
       if (days < 0) {
         months -= 1;
-        days += 30;
+        // Exact days in the previous month
+        const prevMonthDays = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          0,
+        ).getDate();
+        days += prevMonthDays;
       }
       if (months < 0) {
         years -= 1;
@@ -51,13 +58,17 @@ export default function TimelinePage() {
       const totalDaysAlive = Math.floor(
         (now - birthDate) / (1000 * 60 * 60 * 24),
       );
+
+      const isBirthdayToday = now.getMonth() === 8 && now.getDate() === 5;
       let nextBday = new Date(now.getFullYear(), 8, 5);
-      if (now > nextBday) {
+      if (now > nextBday && !isBirthdayToday) {
         nextBday = new Date(now.getFullYear() + 1, 8, 5);
       }
-      const nextBdayDays = Math.ceil((nextBday - now) / (1000 * 60 * 60 * 24));
+      const nextBdayDays = isBirthdayToday
+        ? 0
+        : Math.ceil((nextBday - now) / (1000 * 60 * 60 * 24));
 
-      setBirthStats({ totalDaysAlive, nextBdayDays });
+      setBirthStats({ totalDaysAlive, nextBdayDays, isBirthdayToday });
     };
 
     updateClocks();
@@ -104,8 +115,8 @@ export default function TimelinePage() {
       </div>
 
       {/* Live Love Counter Grid */}
-      <div className="glass-card p-6 sm:p-8 rounded-3xl neon-pink-glow border border-rose-500/30">
-        <div className="flex items-center justify-center gap-2 text-rose-300 mb-6 text-sm font-medium">
+      <div className="glass-card p-6 sm:p-8 rounded-3xl neon-pink-glow border border-rose-500/30 space-y-6">
+        <div className="flex items-center justify-center gap-2 text-rose-300 text-sm font-medium">
           <Heart className="w-4 h-4 fill-rose-500 text-rose-500 animate-ping" />
           <span>TIME SPENT LOVING NEHA PRAVEEN (SINCE 28 JULY 2019)</span>
         </div>
@@ -115,15 +126,21 @@ export default function TimelinePage() {
             { label: "Years", val: loveTime.years },
             { label: "Months", val: loveTime.months },
             { label: "Days", val: loveTime.days },
-            { label: "Hours", val: loveTime.hours },
-            { label: "Minutes", val: loveTime.minutes },
-            { label: "Seconds", val: loveTime.seconds },
+            { label: "Hours", val: String(loveTime.hours).padStart(2, "0") },
+            {
+              label: "Minutes",
+              val: String(loveTime.minutes).padStart(2, "0"),
+            },
+            {
+              label: "Seconds",
+              val: String(loveTime.seconds).padStart(2, "0"),
+            },
           ].map((item, idx) => (
             <div
               key={idx}
               className="bg-slate-900/90 border border-white/10 rounded-2xl p-4"
             >
-              <div className="text-2xl sm:text-4xl font-bold text-cyan-400">
+              <div className="text-2xl sm:text-4xl font-bold text-cyan-400 font-mono">
                 {item.val}
               </div>
               <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider">
@@ -132,6 +149,24 @@ export default function TimelinePage() {
             </div>
           ))}
         </div>
+
+        {/* Birthday Status Highlight Pill */}
+        <div className="pt-2 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs sm:text-sm font-semibold">
+            <Cake className="w-4 h-4" />
+            {birthStats.isBirthdayToday ? (
+              <span>
+                🎉 Today is 05 September — Happy Birthday My Queen Neha! 🎂
+              </span>
+            ) : (
+              <span>
+                ✨ {birthStats.totalDaysAlive.toLocaleString()} Days Since Neha
+                Was Born • Next Birthday (05 Sept) in {birthStats.nextBdayDays}{" "}
+                Days!
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Milestone Timeline Cards */}
@@ -139,7 +174,7 @@ export default function TimelinePage() {
         {milestones.map((m, i) => (
           <div
             key={i}
-            className="glass-card p-6 rounded-2xl border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            className="glass-card p-6 rounded-2xl border border-white/10 hover:border-rose-400/40 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
           >
             <div className="space-y-1">
               <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">

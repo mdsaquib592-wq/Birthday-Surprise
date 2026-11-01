@@ -14,12 +14,12 @@ export default function Navbar({ currentPage, setCurrentPage }) {
   const navItems = [
     { id: "home", label: "Home", icon: Heart },
     { id: "timeline", label: "Our Clock", icon: Clock },
+    { id: "cake", label: "Cake", icon: Cake },
+    { id: "letters", label: "Letters", icon: Mail },
     { id: "memories", label: "Photos", icon: Image },
     { id: "promise", label: "Future Wife 💍", icon: Gem },
     { id: "game", label: "Love Game ❤️", icon: Gamepad2 },
     { id: "jar", label: "Love Jar", icon: Sparkles },
-    { id: "cake", label: "Cake", icon: Cake },
-    { id: "letters", label: "Letters", icon: Mail },
   ];
 
   return (
@@ -43,7 +43,7 @@ export default function Navbar({ currentPage, setCurrentPage }) {
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   active
                     ? "bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-lg shadow-rose-500/30 scale-105"
                     : "text-slate-300 hover:text-white hover:bg-white/5"

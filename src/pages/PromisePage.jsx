@@ -7,24 +7,53 @@ import {
   Download,
   Eye,
   X,
+  Send,
+  Fingerprint,
+  CheckCircle2,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { jsPDF } from "jspdf";
 
+const SAQUIB_WHATSAPP_NUMBER = "918541078902";
+
 export default function PromisePage() {
   const [promiseSigned, setPromiseSigned] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [signedTime, setSignedTime] = useState("");
 
-  // Step 1: Open the visual certificate preview first
+  // Step 1: Interactive Heart-Thumbprint Scan & Certificate Reveal
   const handleAcceptAndPreview = () => {
-    setPromiseSigned(true);
-    setShowPreviewModal(true);
-    confetti({
-      particleCount: 150,
-      spread: 90,
-      origin: { y: 0.6 },
-      colors: ["#f43f5e", "#22d3ee", "#facc15", "#ffffff"],
-    });
+    if (isScanning) return;
+    setIsScanning(true);
+
+    setTimeout(() => {
+      const nowStr = new Date().toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+      setSignedTime(nowStr);
+      setIsScanning(false);
+      setPromiseSigned(true);
+      setShowPreviewModal(true);
+
+      confetti({
+        particleCount: 160,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ["#f43f5e", "#22d3ee", "#facc15", "#ffffff"],
+      });
+    }, 1100);
+  };
+
+  // Notify Saquib on WhatsApp that Neha signed the Marriage Promise Bond
+  const notifySaquibOnWhatsApp = () => {
+    const msg = `💍 *Official Promise Bond Signed!* ❤️\n\nHi Saquib, maine humara *"Forever Marriage Promise Bond"* accept aur sign kar diya hai! InshaAllah hum hamesha saath rahenge. 💖✨`;
+    window.open(
+      `https://wa.me/${SAQUIB_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,
+      "_blank",
+    );
   };
 
   // Step 2: Generate clean, glitch-free PDF when she clicks Download
@@ -97,7 +126,7 @@ export default function PromisePage() {
     doc.setLineWidth(0.5);
     doc.line(35, 96, 175, 96);
 
-    // Sacred Vows Text (100% pure ASCII to prevent font spacing glitches)
+    // Sacred Vows Text
     doc.setTextColor(241, 245, 249);
     doc.setFont("times", "italic");
     doc.setFontSize(13);
@@ -119,7 +148,7 @@ export default function PromisePage() {
     ];
     doc.text(vowsText, 26, 112, { lineHeightFactor: 1.45 });
 
-    // Highlight Status Box (Centered & Clean ASCII)
+    // Highlight Status Box
     doc.setFillColor(30, 20, 38);
     doc.setDrawColor(244, 63, 94);
     doc.setLineWidth(0.7);
@@ -186,7 +215,18 @@ export default function PromisePage() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 py-10 space-y-10 select-none">
+      <style>{`
+        @keyframes stampPop {
+          0% { transform: scale(2.4) rotate(-25deg); opacity: 0; }
+          70% { transform: scale(0.9) rotate(-10deg); opacity: 1; }
+          100% { transform: scale(1) rotate(-12deg); opacity: 1; }
+        }
+        .animate-stamp {
+          animation: stampPop 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+      `}</style>
+
       <div className="text-center space-y-3">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs uppercase tracking-widest">
           <Stars className="w-4 h-4" />
@@ -213,10 +253,10 @@ export default function PromisePage() {
                 e.target.src =
                   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80";
               }}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover hover:scale-105 transition duration-700"
             />
             <span className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-400/30">
-              Saquib & Neha • InshaAllah
+              Saquib &amp; Neha • InshaAllah
             </span>
           </div>
           <p className="text-center font-romantic text-2xl text-cyan-300 mt-3">
@@ -225,12 +265,12 @@ export default function PromisePage() {
           </p>
         </div>
 
-        {/* Right: Vows & Preview Trigger */}
+        {/* Right: Vows & Interactive Thumbprint Sign */}
         <div className="space-y-4">
           {vows.map((v, i) => (
             <div
               key={i}
-              className="glass-card p-5 rounded-2xl border border-white/10 space-y-1"
+              className="glass-card p-5 rounded-2xl border border-white/10 hover:border-rose-400/40 transition space-y-1"
             >
               <h3 className="text-lg font-bold text-rose-300 flex items-center gap-2">
                 <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
@@ -240,41 +280,61 @@ export default function PromisePage() {
             </div>
           ))}
 
-          <div className="glass-card p-6 rounded-2xl border border-cyan-400/40 text-center space-y-4">
+          <div className="glass-card p-6 rounded-2xl border border-cyan-400/40 text-center space-y-4 relative overflow-hidden">
             <p className="font-romantic text-2xl text-white">
-              "No matter how long it takes to convince everyone, my heart is
-              locked on you, Neha Praveen. — Yours forever, Saquib"
+              &ldquo;No matter how long it takes to convince everyone, my heart
+              is locked on you, Neha Praveen. — Yours forever, Saquib&rdquo;
             </p>
+
             {!promiseSigned ? (
-              <button
-                onClick={handleAcceptAndPreview}
-                className="px-6 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-semibold text-sm inline-flex items-center gap-2 shadow-lg shadow-rose-500/30 hover:scale-105 transition"
-              >
-                <Sparkles className="w-4 h-4" />
-                Accept & View Our Promise Bond 💍
-              </button>
-            ) : (
-              <div className="space-y-3">
-                <div className="text-emerald-300 text-sm font-semibold flex items-center justify-center gap-2">
-                  <ShieldCheck className="w-5 h-5" />
+              <div className="space-y-3 pt-1">
+                <button
+                  onClick={handleAcceptAndPreview}
+                  disabled={isScanning}
+                  className="px-7 py-4 rounded-full bg-gradient-to-r from-rose-500 via-pink-600 to-amber-500 text-white font-bold text-sm inline-flex items-center gap-2.5 shadow-lg shadow-rose-500/30 hover:scale-105 transition cursor-pointer"
+                >
+                  <Fingerprint
+                    className={`w-5 h-5 ${
+                      isScanning ? "animate-ping text-amber-200" : ""
+                    }`}
+                  />
                   <span>
-                    Promise Accepted! View or Download Your Certificate Below:
+                    {isScanning
+                      ? "Scanning Neha's Heart Signature..."
+                      : "Tap to Co-Sign & View Promise Bond 💍"}
                   </span>
+                </button>
+                <p className="text-[11px] text-slate-400">
+                  Tap above to place your digital signature on our Forever Bond
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3 animate-fadeIn">
+                <div className="text-emerald-300 text-sm font-semibold flex items-center justify-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                  <span>Promise Bond Signed &amp; Sealed! ({signedTime})</span>
                 </div>
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex flex-wrap justify-center gap-2.5">
                   <button
                     onClick={() => setShowPreviewModal(true)}
-                    className="px-5 py-2.5 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-300 text-xs font-semibold inline-flex items-center gap-1.5 hover:bg-rose-500/30 transition"
+                    className="px-4 py-2.5 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-300 text-xs font-semibold inline-flex items-center gap-1.5 hover:bg-rose-500/30 transition cursor-pointer"
                   >
                     <Eye className="w-4 h-4" />
-                    View Promise Bond
+                    View Certificate
                   </button>
                   <button
                     onClick={generatePromiseBondPDF}
-                    className="px-5 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-lg hover:scale-105 transition"
+                    className="px-4 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-lg hover:scale-105 transition cursor-pointer"
                   >
                     <Download className="w-4 h-4" />
-                    Download PDF Certificate
+                    Download PDF
+                  </button>
+                  <button
+                    onClick={notifySaquibOnWhatsApp}
+                    className="px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 shadow-lg hover:scale-105 transition cursor-pointer"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    Notify Saquib 💬
                   </button>
                 </div>
               </div>
@@ -283,22 +343,33 @@ export default function PromisePage() {
         </div>
       </div>
 
-      {/* On-Screen Certificate Preview Modal (Shows First Before Downloading) */}
+      {/* On-Screen Certificate Preview Modal */}
       {showPreviewModal && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="relative max-w-2xl w-full bg-[#0c0e18] border-2 border-rose-500 rounded-3xl p-1 shadow-2xl my-8">
-            <div className="border border-cyan-400/60 rounded-[20px] p-6 sm:p-8 space-y-6 text-center relative">
+          <div className="relative max-w-2xl w-full bg-[#0c0e18] border-2 border-rose-500 rounded-3xl p-1 shadow-2xl my-8 animate-fadeIn">
+            <div className="border border-cyan-400/60 rounded-[20px] p-6 sm:p-8 space-y-6 text-center relative overflow-hidden">
               {/* Close Button */}
               <button
                 onClick={() => setShowPreviewModal(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/5 p-1.5 rounded-full"
+                className="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/10 p-1.5 rounded-full cursor-pointer z-20"
               >
                 <X className="w-5 h-5" />
               </button>
 
+              {/* Official Golden Royal Stamp Badge */}
+              <div className="animate-stamp hidden sm:flex flex-col items-center justify-center w-28 h-28 rounded-full border-2 border-dashed border-amber-400/80 bg-amber-400/10 text-amber-300 absolute top-6 left-6 pointer-events-none shadow-lg">
+                <CheckCircle2 className="w-6 h-6 text-amber-300 mb-0.5" />
+                <span className="text-[9px] font-extrabold uppercase tracking-tighter">
+                  OFFICIALLY SEALED
+                </span>
+                <span className="text-[8px] text-rose-300 font-bold">
+                  INSHAALLAH ❤️
+                </span>
+              </div>
+
               <div className="space-y-1">
                 <p className="text-[11px] font-bold tracking-widest text-cyan-400 uppercase">
-                  OFFICIAL ETERNAL LOVE & MARRIAGE PROMISE BOND
+                  OFFICIAL ETERNAL LOVE &amp; MARRIAGE PROMISE BOND
                 </p>
                 <h3 className="font-romantic text-4xl sm:text-5xl text-rose-400">
                   Forever Promise Certificate
@@ -335,13 +406,13 @@ export default function PromisePage() {
                 </p>
                 <p>
                   3. I promise to wait patiently, work hard, and win your
-                  parents' hearts and blessings with complete respect so they
-                  happily place your hand into mine.
+                  parents&apos; hearts and blessings with complete respect so
+                  they happily place your hand into mine.
                 </p>
                 <p>
-                  4. InshaAllah, the day your parents say "Yes", I will make you
-                  my forever bride in front of the whole world and love you
-                  endlessly for life.
+                  4. InshaAllah, the day your parents say &ldquo;Yes&rdquo;, I
+                  will make you my forever bride in front of the whole world and
+                  love you endlessly for life.
                 </p>
               </div>
 
@@ -360,15 +431,15 @@ export default function PromisePage() {
               <div className="grid grid-cols-2 gap-6 pt-4">
                 <div className="space-y-1">
                   <p className="font-romantic text-2xl text-cyan-400 border-b border-slate-600 pb-1">
-                    Neha Praveen
+                    Neha Praveen ✓
                   </p>
                   <p className="text-[11px] text-slate-400">
-                    Accepted By (My Future Wife)
+                    Digitally Signed By (My Future Wife)
                   </p>
                 </div>
                 <div className="space-y-1">
                   <p className="font-romantic text-2xl text-cyan-400 border-b border-slate-600 pb-1">
-                    Md Saquib Alam
+                    Md Saquib Alam ✓
                   </p>
                   <p className="text-[11px] text-slate-400">
                     Signed By (Yours Forever, Saquib)
@@ -380,16 +451,23 @@ export default function PromisePage() {
               <div className="pt-4 flex flex-wrap justify-center gap-3 border-t border-white/10">
                 <button
                   onClick={generatePromiseBondPDF}
-                  className="px-6 py-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-semibold text-sm inline-flex items-center gap-2 shadow-lg shadow-rose-500/30 hover:scale-105 transition"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-semibold text-xs sm:text-sm inline-flex items-center gap-2 shadow-lg shadow-rose-500/30 hover:scale-105 transition cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
                   Download Promise Bond PDF 💍
                 </button>
                 <button
-                  onClick={() => setShowPreviewModal(false)}
-                  className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-semibold transition"
+                  onClick={notifySaquibOnWhatsApp}
+                  className="px-5 py-3 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm inline-flex items-center gap-2 shadow-lg hover:scale-105 transition cursor-pointer"
                 >
-                  Close Preview
+                  <Send className="w-4 h-4" />
+                  Send Acceptance to Saquib 💬
+                </button>
+                <button
+                  onClick={() => setShowPreviewModal(false)}
+                  className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/15 text-slate-300 text-xs font-semibold transition cursor-pointer"
+                >
+                  Close
                 </button>
               </div>
             </div>
