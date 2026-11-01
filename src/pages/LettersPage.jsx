@@ -157,7 +157,7 @@ export default function LettersPage() {
 
               <div className="mt-6 pt-4 border-t border-amber-400/50 flex justify-between items-center text-xs text-amber-900 font-bold">
                 <span>✨ King of Your Heart, Saquib</span>
-                <span className="text-amber-800">05 Sept 💖</span>
+                <span className="text-amber-800">05 Nov 💖</span>
               </div>
             </div>
 

@@ -161,7 +161,7 @@ export default function TimelinePage() {
             ) : (
               <span>
                 ✨ {birthStats.totalDaysAlive.toLocaleString()} Days Since Neha
-                Was Born • Next Birthday (05 Sept) in {birthStats.nextBdayDays}{" "}
+                Was Born • Next Birthday (05 Nov) in {birthStats.nextBdayDays}{" "}
                 Days!
               </span>
             )}

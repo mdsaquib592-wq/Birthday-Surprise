@@ -349,7 +349,7 @@ export default function CakePage() {
                     ))}
                   </div>
                   <div className="pr-2 text-right text-[11px] sm:text-xs font-extrabold tracking-widest text-amber-200 drop-shadow">
-                    05 SEPT
+                    05 Nov
                   </div>
                   <div className="flex justify-around pb-1">
                     {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -476,7 +476,7 @@ export default function CakePage() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-rose-950/60 via-transparent to-amber-300/20 pointer-events-none" />
                       <span className="absolute top-2 right-2 bg-rose-600/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
-                        🎂 05 Sept
+                        🎂 05 Nov
                       </span>
                     </div>
                     <p className="font-romantic text-rose-600 text-lg font-bold mt-2 leading-none">
