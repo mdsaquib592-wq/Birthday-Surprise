@@ -78,7 +78,7 @@ export default function TimelinePage() {
 
   const milestones = [
     {
-      date: "05 September 2002",
+      date: "05 November 2002",
       title: "My Queen Entered the World",
       desc: "The day Neha Praveen was born — destined to become the love of my life.",
       badge: `${birthStats.totalDaysAlive.toLocaleString()} Days of Grace`,

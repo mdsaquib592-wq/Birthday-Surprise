@@ -7,7 +7,7 @@ export default function LettersPage() {
     {
       title: "Open Today on Your Birthday (05 Sep)",
       tag: "Birthday Queen Special",
-      body: "Happy Birthday, myjaan Neha Praveen! On 05 September 2002, the love of my life was born. You are the best girlfriend anyone could ever pray for, and my heart already treats you as my wife. May this year bring you closer to all your dreams—and bring us closer to our forever.",
+      body: "Happy Birthday, myjaan Neha Praveen! On 05 November 2002, the love of my life was born. You are the best girlfriend anyone could ever pray for, and my heart already treats you as my wife. May this year bring you closer to all your dreams—and bring us closer to our forever.",
     },
     {
       title: "Open When You Think About Our Future Wedding",

@@ -115,7 +115,7 @@ export default function PromisePage() {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
     doc.text(
-      "Her Birthday: 05 September 2002   |   In Love Since: 28 July 2019",
+      "Her Birthday: 05 November 2002   |   In Love Since: 28 July 2019",
       105,
       89,
       { align: "center" },
@@ -384,8 +384,8 @@ export default function PromisePage() {
                   Neha Praveen &nbsp;&amp;&nbsp; Md Saquib Alam
                 </h4>
                 <p className="text-xs text-slate-400 font-semibold">
-                  Her Birthday: 05 September 2002 &nbsp;|&nbsp; In Love Since:
-                  28 July 2019
+                  Her Birthday: 05 November 2002 &nbsp;|&nbsp; In Love Since: 28
+                  July 2019
                 </p>
               </div>
 

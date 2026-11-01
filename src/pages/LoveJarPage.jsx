@@ -7,7 +7,7 @@ export default function LoveJarPage() {
     "Because since 28 July 2019, not a single day has passed where I haven't thanked Allah for bringing you into my life.",
     "Because you are my sweetest girlfriend today, and in my heart and prayers, you are already my future wife.",
     "Because I am willing to wait, work hard, and win your parents' blessings with all my respect just to call you mine forever.",
-    "Because on 05 September 2002, the universe created the prettiest, kindest soul just for me.",
+    "Because on 05 November 2002, the universe created the prettiest, kindest soul just for me.",
     "Because one smile from you, Neha, can heal my worst days in a single second.",
     "Because our love has stayed strong since 2019, proving that we are meant for a lifetime of marriage.",
     "Because imagining the day your parents agree and I see you as my bride makes my heart skip a beat.",
