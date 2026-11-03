@@ -16,6 +16,7 @@ const SAQUIB_WHATSAPP_NUMBER = "918541078902";
 export default function CakePage() {
   const [candlesLit, setCandlesLit] = useState([true, true, true, true, true]);
   const [isCutting, setIsCutting] = useState(false);
+  const [cutStep, setCutStep] = useState(0); // 0: idle, 1: first cut, 2: second cut
   const [cakeCut, setCakeCut] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [wishText, setWishText] = useState("");
@@ -24,7 +25,6 @@ export default function CakePage() {
   const audioRef = useRef(null);
   const audioCtxRef = useRef(null);
 
-  // Stop music cleanly if Neha navigates to another page
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -36,7 +36,6 @@ export default function CakePage() {
     };
   }, []);
 
-  // Realistic Music Box "Happy Birthday To You" Melody
   const playHappyBirthdayMelody = () => {
     try {
       if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
@@ -162,10 +161,40 @@ export default function CakePage() {
   const handleCutCake = () => {
     if (isCutting || cakeCut) return;
     setIsCutting(true);
+    setCutStep(1); // Start 1st Cut
 
+    // Crumb burst during 1st cut
+    setTimeout(() => {
+      confetti({
+        particleCount: 25,
+        spread: 40,
+        origin: { y: 0.55 },
+        colors: ["#9f1239", "#fda4af", "#fef08a"],
+        scalar: 0.55,
+      });
+    }, 800);
+
+    // Switch to 2nd Cut (diagonal V-cut)
+    setTimeout(() => {
+      setCutStep(2);
+    }, 1700);
+
+    // Crumb burst during 2nd cut
+    setTimeout(() => {
+      confetti({
+        particleCount: 30,
+        spread: 50,
+        origin: { y: 0.55 },
+        colors: ["#9f1239", "#fda4af", "#fef08a"],
+        scalar: 0.6,
+      });
+    }, 2400);
+
+    // Finish both cuts and pull out the slice
     setTimeout(() => {
       setCakeCut(true);
       setIsCutting(false);
+      setCutStep(0);
 
       confetti({ particleCount: 180, spread: 110, origin: { y: 0.5 } });
       setTimeout(() => {
@@ -182,7 +211,7 @@ export default function CakePage() {
           origin: { x: 1 },
         });
       }, 300);
-    }, 1300);
+    }, 3400);
   };
 
   const handleSealAndNotifyWhatsApp = () => {
@@ -200,29 +229,149 @@ export default function CakePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10 text-center space-y-8 select-none">
       <style>{`
-        @keyframes flicker {
-          0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.95; }
-          50% { transform: scale(1.08, 0.94) rotate(2deg); opacity: 1; }
+        /* MULTI-LAYER REALISTIC CANDLE FLAME */
+        @keyframes outerFlameWind {
+          0% { transform: scaleX(1) scaleY(1) rotate(-2deg) skewX(-2deg); }
+          25% { transform: scaleX(0.92) scaleY(1.06) rotate(3deg) skewX(3deg); }
+          50% { transform: scaleX(1.05) scaleY(0.95) rotate(-4deg) skewX(-3deg); }
+          75% { transform: scaleX(0.96) scaleY(1.04) rotate(2deg) skewX(1deg); }
+          100% { transform: scaleX(1.02) scaleY(0.98) rotate(-1deg) skewX(-1deg); }
         }
-        @keyframes smokeRise {
-          0% { transform: translateY(0) scale(0.8); opacity: 0.8; }
-          100% { transform: translateY(-28px) scale(1.6); opacity: 0; }
+        @keyframes haloPulse {
+          0%, 100% { transform: scale(1); opacity: 0.55; }
+          50% { transform: scale(1.3); opacity: 0.85; }
         }
-        @keyframes knifeSlice {
-          0% { transform: translate(-50%, -130px) rotate(-25deg); opacity: 0; }
-          20% { transform: translate(-50%, -85px) rotate(-15deg); opacity: 1; }
-          75% { transform: translate(-50%, 115px) rotate(0deg); opacity: 1; }
-          100% { transform: translate(-50%, 145px) rotate(5deg); opacity: 0; }
+        @keyframes smokeCurl {
+          0% { transform: translateY(0) scale(0.4) rotate(0deg); opacity: 0.9; }
+          50% { transform: translateY(-22px) translateX(6px) scale(1.2) rotate(12deg); opacity: 0.5; }
+          100% { transform: translateY(-50px) translateX(-8px) scale(2.2) rotate(-15deg); opacity: 0; }
         }
-        .flame-glow {
-          animation: flicker 0.4s infinite ease-in-out;
-          box-shadow: 0 0 18px 6px rgba(251, 191, 36, 0.65), 0 0 32px 12px rgba(244, 63, 94, 0.35);
+
+        /* TWO-STEP REALISTIC CAKE CUTTING (1st Cut -> Lift & Reposition -> 2nd Cut) */
+        @keyframes realisticTwoStepKnife {
+          /* --- FIRST CUT (Left Wedge Line) --- */
+          0% {
+            transform: translate(55px, -150px) rotate(-35deg) scale(0.92);
+            opacity: 0;
+          }
+          8% {
+            transform: translate(-12px, -85px) rotate(-18deg) scale(1);
+            opacity: 1;
+          }
+          16% {
+            transform: translate(-28px, -30px) rotate(-8deg);
+          }
+          24% {
+            transform: translate(-4px, 25px) rotate(-15deg);
+          }
+          32% {
+            transform: translate(-26px, 80px) rotate(-6deg);
+          }
+          42% {
+            transform: translate(-12px, 120px) rotate(-2deg);
+          }
+          /* --- LIFT KNIFE OUT & SHIFT FOR 2ND CUT --- */
+          50% {
+            transform: translate(35px, -95px) rotate(-28deg) scale(1.03);
+          }
+          /* --- SECOND CUT (Right Angled Wedge Line) --- */
+          58% {
+            transform: translate(26px, -65px) rotate(-12deg) scale(1);
+          }
+          67% {
+            transform: translate(6px, -15px) rotate(-4deg);
+          }
+          76% {
+            transform: translate(30px, 40px) rotate(-11deg);
+          }
+          85% {
+            transform: translate(10px, 95px) rotate(-3deg);
+          }
+          93% {
+            transform: translate(22px, 125px) rotate(2deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(65px, 155px) rotate(15deg) scale(0.95);
+            opacity: 0;
+          }
         }
-        .smoke-puff {
-          animation: smokeRise 1s ease-out forwards;
+
+        @keyframes firstCutLineAnim {
+          0% { height: 0%; opacity: 0; }
+          10% { opacity: 1; }
+          42% { height: 100%; opacity: 1; }
+          100% { height: 100%; opacity: 0.9; }
         }
-        .knife-animate {
-          animation: knifeSlice 1.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        @keyframes secondCutLineAnim {
+          0%, 52% { height: 0%; opacity: 0; }
+          58% { opacity: 1; }
+          92% { height: 100%; opacity: 1; }
+          100% { height: 100%; opacity: 0.9; }
+        }
+
+        @keyframes cakeSubtleFloat {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-4px); }
+        }
+        @keyframes cakeCutShake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-1.5px) rotate(-0.3deg); }
+          50% { transform: translateX(1.5px) rotate(0.3deg); }
+          75% { transform: translateX(-1px); }
+        }
+        @keyframes wedgeSlideOut {
+          0% {
+            transform: translateY(-30px) scale(0.55);
+            opacity: 0;
+          }
+          60% {
+            transform: translateY(6px) scale(1.05);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0px) scale(1);
+            opacity: 1;
+          }
+        }
+
+        .flame-svg {
+          transform-origin: 50% 90%;
+          animation: outerFlameWind 0.45s infinite ease-in-out alternate;
+        }
+        .flame-halo {
+          animation: haloPulse 1.2s infinite ease-in-out;
+        }
+        .smoke-trail {
+          animation: smokeCurl 1.6s ease-out forwards;
+        }
+        .knife-two-cut-animate {
+          animation: realisticTwoStepKnife 3.4s cubic-bezier(0.35, 0, 0.25, 1) forwards;
+        }
+        .first-cut-seam {
+          animation: firstCutLineAnim 3.4s ease-in-out forwards;
+        }
+        .second-cut-seam {
+          animation: secondCutLineAnim 3.4s ease-in-out forwards;
+        }
+        .cake-idle-float {
+          animation: cakeSubtleFloat 4s ease-in-out infinite;
+        }
+        .cake-sawing-vibration {
+          animation: cakeCutShake 0.22s infinite;
+        }
+        .wedge-serve-anim {
+          animation: wedgeSlideOut 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        .tier-3d-lighting {
+          box-shadow: 
+            inset 16px 0 25px -10px rgba(255, 255, 255, 0.45),
+            inset -22px 0 30px -10px rgba(88, 12, 31, 0.65),
+            0 18px 35px -8px rgba(0, 0, 0, 0.75);
+        }
+        .ganache-drip {
+          background: linear-gradient(180deg, #2a0810 0%, #4c0519 60%, #881337 100%);
+          box-shadow: inset 1px -2px 4px rgba(255,255,255,0.25), 0 4px 6px rgba(0,0,0,0.45);
         }
       `}</style>
 
@@ -237,8 +386,8 @@ export default function CakePage() {
           {!allBlown
             ? "Tap each glowing candle on the cake to blow them out!"
             : !cakeCut
-              ? "🎶 Happy Birthday song is playing! Now slice your birthday cake!"
-              : "🎉 Yay! Happy Birthday Queen Neha! Read your special birthday note below ❤️"}
+              ? "🎶 Happy Birthday song is playing! Tap below to cut your cake in 2 slices!"
+              : "🎉 Yay! Happy Birthday Queen Neha! Your freshly cut slice is ready ❤️"}
         </p>
 
         {allBlown && (
@@ -259,188 +408,559 @@ export default function CakePage() {
       </div>
 
       {/* Main Glass Card */}
-      <div className="glass-card p-6 sm:p-12 rounded-3xl border border-pink-400/30 bg-slate-900/70 backdrop-blur-xl shadow-2xl space-y-8 relative overflow-hidden">
-        {/* STAGE: Realistic 3D Two-Tier Cake */}
-        <div className="relative pt-14 pb-6 flex flex-col items-center justify-center min-h-[340px]">
+      <div className="glass-card p-6 sm:p-12 rounded-3xl border border-pink-400/30 bg-slate-950/85 backdrop-blur-xl shadow-2xl space-y-8 relative overflow-hidden">
+        {/* Ambient Romantic Backlight */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
+        {candlesLit.some(Boolean) && (
+          <div className="absolute top-24 left-1/2 -translate-x-1/2 w-72 h-40 bg-amber-400/15 rounded-full blur-3xl pointer-events-none transition-opacity duration-700" />
+        )}
+
+        {/* STAGE: Ultra-Realistic 3D Bakery Cake */}
+        <div
+          className={`relative pt-14 pb-12 flex flex-col items-center justify-center min-h-[440px] ${
+            isCutting
+              ? "cake-sawing-vibration"
+              : !cakeCut
+                ? "cake-idle-float"
+                : ""
+          }`}
+        >
+          {/* REALISTIC SVG CHEF'S KNIFE WITH 2-CUT MOTION */}
           {isCutting && (
-            <div className="knife-animate absolute left-1/2 top-24 z-50 pointer-events-none flex flex-col items-center">
-              <div className="flex items-center shadow-2xl">
-                <div className="w-16 h-5 bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-500 rounded-l-full border border-amber-200 shadow-md" />
-                <div className="w-36 h-7 bg-gradient-to-r from-slate-100 via-white to-slate-300 rounded-r-full border-b-4 border-slate-400 shadow-xl" />
+            <div className="knife-two-cut-animate absolute left-1/2 top-28 z-50 pointer-events-none -ml-28">
+              <div className="relative flex flex-col items-center">
+                <svg
+                  width="240"
+                  height="80"
+                  viewBox="0 0 240 80"
+                  className="drop-shadow-[0_18px_16px_rgba(0,0,0,0.85)]"
+                >
+                  <defs>
+                    <linearGradient
+                      id="steelBlade"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stopColor="#f8fafc" />
+                      <stop offset="40%" stopColor="#cbd5e1" />
+                      <stop offset="55%" stopColor="#ffffff" />
+                      <stop offset="85%" stopColor="#94a3b8" />
+                      <stop offset="100%" stopColor="#e2e8f0" />
+                    </linearGradient>
+                    <linearGradient
+                      id="edgeGlint"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="50%" stopColor="#fde047" />
+                      <stop offset="100%" stopColor="#ffffff" />
+                    </linearGradient>
+                    <linearGradient
+                      id="woodHandle"
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stopColor="#78350f" />
+                      <stop offset="50%" stopColor="#451a03" />
+                      <stop offset="100%" stopColor="#270e02" />
+                    </linearGradient>
+                  </defs>
+                  {/* Chef Knife Curved Steel Blade */}
+                  <path
+                    d="M15 35 L155 20 L155 54 Q85 62 15 35 Z"
+                    fill="url(#steelBlade)"
+                    stroke="#64748b"
+                    strokeWidth="1"
+                  />
+                  {/* Sharp Bottom Cutting Edge Glint */}
+                  <path
+                    d="M15 35 Q85 61 155 54"
+                    fill="none"
+                    stroke="url(#edgeGlint)"
+                    strokeWidth="2.5"
+                  />
+                  {/* Gold Bolster */}
+                  <rect
+                    x="153"
+                    y="19"
+                    width="9"
+                    height="36"
+                    rx="2"
+                    fill="#fbbf24"
+                  />
+                  {/* Ergonomic Rosewood Handle */}
+                  <path
+                    d="M161 20 L225 17 Q236 17 236 30 L236 42 Q236 53 224 50 L161 52 Z"
+                    fill="url(#woodHandle)"
+                    stroke="#f59e0b"
+                    strokeWidth="1"
+                  />
+                  {/* Brass Rivets */}
+                  <circle cx="176" cy="35" r="3" fill="#fde047" />
+                  <circle cx="198" cy="34" r="3" fill="#fde047" />
+                  <circle cx="218" cy="33" r="3" fill="#fde047" />
+                </svg>
+                <span className="px-3.5 py-0.5 rounded-full bg-amber-400/25 border border-amber-300/60 text-xs text-amber-200 font-bold tracking-wider shadow-lg">
+                  {cutStep === 1
+                    ? "🔪 1st Cut..."
+                    : "🔪 2nd Cut (Taking Out Slice)..."}
+                </span>
               </div>
-              <span className="text-xs text-amber-300 font-semibold mt-1 drop-shadow">
-                ✨ Slicing...
-              </span>
             </div>
           )}
 
-          {/* CANDLES ROW */}
+          {/* CANDLES ROW — ADJUSTED TO SIT SNUGLY INSIDE THE TOP FROSTING */}
           <div
-            className={`flex justify-center gap-5 sm:gap-7 z-30 mb-[-6px] transition-all duration-700 ${
+            className={`flex justify-center items-end gap-4 sm:gap-6 z-30 -mb-3.5 transition-all duration-700 ${
               cakeCut
                 ? "opacity-0 scale-75 pointer-events-none h-0 mb-0"
                 : "opacity-100"
             }`}
           >
-            {candlesLit.map((lit, i) => (
-              <div
-                key={i}
-                onClick={() => blowCandle(i)}
-                className="cursor-pointer flex flex-col items-center group"
-                title="Tap to blow out!"
-              >
-                <div className="h-9 flex items-center justify-center relative">
-                  {lit ? (
-                    <div className="relative flex items-center justify-center group-hover:scale-125 transition-transform">
-                      <div className="w-4 h-6 bg-gradient-to-t from-orange-500 via-amber-400 to-yellow-100 rounded-full rounded-t-[80%] flame-glow" />
-                      <div className="w-1.5 h-3 bg-white rounded-full absolute bottom-0.5" />
-                    </div>
-                  ) : (
-                    <span className="text-sm smoke-puff select-none">💨</span>
-                  )}
-                </div>
-                <div className="w-0.5 h-1.5 bg-slate-800" />
+            {candlesLit.map((lit, i) => {
+              // Slight arc height variation so candles look naturally placed on a round cake
+              const heightClass =
+                i === 2 ? "h-16" : i === 1 || i === 3 ? "h-15" : "h-14";
+              return (
                 <div
-                  className="w-3.5 sm:w-4 h-14 rounded-t-md shadow-md border border-white/40 relative overflow-hidden"
-                  style={{
-                    background:
-                      "repeating-linear-gradient(45deg, #fff1f2, #fff1f2 5px, #fb7185 5px, #fb7185 10px)",
-                  }}
+                  key={i}
+                  onClick={() => blowCandle(i)}
+                  className="cursor-pointer flex flex-col items-center group relative"
+                  title="Tap to blow out!"
                 >
-                  <div className="w-full h-2 bg-amber-300/60 bottom-0 absolute" />
+                  {/* Realistic SVG Flame & Smoke */}
+                  <div className="h-12 w-9 flex items-center justify-center relative -mb-1">
+                    {lit ? (
+                      <div
+                        className="relative flex items-center justify-center group-hover:scale-125 transition-transform"
+                        style={{ animationDelay: `${i * 0.12}s` }}
+                      >
+                        <div className="w-9 h-9 rounded-full bg-amber-400/40 blur-md absolute -top-1 flame-halo" />
+                        <svg
+                          width="26"
+                          height="40"
+                          viewBox="0 0 28 42"
+                          className="flame-svg relative z-10 overflow-visible"
+                          style={{ animationDelay: `${i * 0.09}s` }}
+                        >
+                          <defs>
+                            <radialGradient
+                              id={`flameGrad-${i}`}
+                              cx="50%"
+                              cy="78%"
+                              r="65%"
+                            >
+                              <stop offset="0%" stopColor="#ffffff" />
+                              <stop offset="22%" stopColor="#fef08a" />
+                              <stop offset="55%" stopColor="#f97316" />
+                              <stop
+                                offset="90%"
+                                stopColor="#dc2626"
+                                stopOpacity="0.9"
+                              />
+                              <stop
+                                offset="100%"
+                                stopColor="#991b1b"
+                                stopOpacity="0"
+                              />
+                            </radialGradient>
+                          </defs>
+                          <path
+                            d="M14 2 C14 2 25 16 25 27 C25 35 20 40 14 40 C8 40 3 35 3 27 C3 16 14 2 14 2 Z"
+                            fill={`url(#flameGrad-${i})`}
+                          />
+                          <path
+                            d="M14 13 C14 13 20 22 20 29 C20 34 17 38 14 38 C11 38 8 34 8 29 C8 22 14 13 14 13 Z"
+                            fill="#fef9c3"
+                            opacity="0.9"
+                          />
+                          <ellipse
+                            cx="14"
+                            cy="37.5"
+                            rx="4.5"
+                            ry="2.5"
+                            fill="#38bdf8"
+                            opacity="0.85"
+                          />
+                        </svg>
+                      </div>
+                    ) : (
+                      <svg
+                        width="28"
+                        height="46"
+                        viewBox="0 0 30 50"
+                        className="smoke-trail overflow-visible"
+                      >
+                        <path
+                          d="M15 45 Q8 35 16 25 T14 5"
+                          fill="none"
+                          stroke="rgba(226,232,240,0.75)"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
+                  </div>
+
+                  {/* Wick */}
+                  <div className="w-0.5 h-1.5 bg-gradient-to-b from-amber-500 to-slate-950 rounded-full" />
+
+                  {/* 3D Cylindrical Striped Wax Candle */}
+                  <div
+                    className={`w-3.5 sm:w-4 ${heightClass} rounded-t-md relative overflow-hidden border border-white/60 shadow-[inset_-3px_0_6px_rgba(0,0,0,0.35),0_4px_10px_rgba(0,0,0,0.5)]`}
+                    style={{
+                      background:
+                        "repeating-linear-gradient(-35deg, #fff1f2, #fff1f2 5px, #e11d48 5px, #e11d48 10px)",
+                    }}
+                  >
+                    <div className="w-1.5 h-3.5 bg-white/90 rounded-b-full absolute top-0 left-0.5 shadow-sm" />
+                    <div className="w-full h-2 bg-gradient-to-r from-amber-600 via-yellow-200 to-amber-600 bottom-0 absolute border-t border-amber-300" />
+                  </div>
+
+                  {/* Cream Rosette Ring at Base of Each Candle (Anchors candle into the cake) */}
+                  <div className="w-6 h-2.5 -mt-1 rounded-full bg-gradient-to-b from-white via-pink-50 to-pink-200 shadow-md border border-pink-200/80 z-10" />
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* CAKE CONTAINER */}
-          <div className="relative flex flex-col items-center w-full max-w-md mx-auto">
+          <div className="relative flex flex-col items-center w-full max-w-lg mx-auto">
             <div className="relative w-full flex justify-center items-end">
-              {/* LEFT HALF */}
+              {/* TWO V-SHAPED CUT SEAMS DURING SLICING */}
+              {isCutting && (
+                <>
+                  {/* 1st Cut Line */}
+                  <div className="first-cut-seam absolute left-1/2 -ml-3 top-2 w-1 bg-gradient-to-b from-white via-amber-300 to-rose-600 z-40 shadow-[0_0_12px_#fbbf24] origin-top -rotate-2" />
+                  {/* 2nd Cut Line (Forms a V-Wedge) */}
+                  <div className="second-cut-seam absolute left-1/2 ml-4 top-2 w-1 bg-gradient-to-b from-white via-amber-300 to-rose-600 z-40 shadow-[0_0_12px_#fbbf24] origin-top rotate-6" />
+                </>
+              )}
+
+              {/* ================= LEFT HALF OF CAKE ================= */}
               <div
                 className={`flex flex-col items-end transition-all duration-1000 ease-out ${
                   cakeCut
-                    ? "-translate-x-5 sm:-translate-x-10 -rotate-3"
+                    ? "-translate-x-8 sm:-translate-x-12 -rotate-2"
                     : "translate-x-0 rotate-0"
                 }`}
               >
-                <div className="w-28 sm:w-36 h-20 bg-gradient-to-b from-pink-200 via-pink-300 to-rose-300 rounded-tl-3xl relative shadow-inner border-t-4 border-l-2 border-white/60 overflow-hidden flex flex-col justify-between">
-                  <div className="flex justify-around items-start">
-                    <div className="w-5 h-5 bg-rose-600 rounded-b-full" />
-                    <div className="w-4 h-8 bg-rose-600 rounded-b-full" />
-                    <div className="w-6 h-6 bg-rose-600 rounded-b-full" />
-                    <div className="w-4 h-9 bg-rose-600 rounded-b-full" />
+                {/* Top Strawberries & Cream Rosettes (Left) */}
+                <div className="flex justify-between items-end w-28 sm:w-36 px-3 -mb-1.5 z-10">
+                  <div className="w-5 h-6 bg-gradient-to-b from-red-500 to-rose-800 rounded-b-full rounded-t-md relative shadow-md -rotate-12">
+                    <div className="w-4 h-1.5 bg-emerald-500 rounded-full absolute -top-1 left-0.5" />
                   </div>
-                  <div className="pr-2 pb-3 text-right font-romantic text-lg sm:text-xl text-rose-900 font-bold drop-shadow-sm">
+                  <div className="w-5 h-3.5 rounded-full bg-gradient-to-b from-white to-pink-100 shadow border border-pink-200" />
+                </div>
+
+                {/* TOP TIER (Left) */}
+                <div className="w-32 sm:w-44 h-24 bg-gradient-to-b from-pink-200 via-pink-300 to-rose-400 rounded-tl-[2rem] relative tier-3d-lighting border-t-4 border-l border-white/70 overflow-hidden flex flex-col justify-between">
+                  <div className="flex justify-around items-start">
+                    <div className="w-5 h-7 ganache-drip rounded-b-full" />
+                    <div className="w-4 h-11 ganache-drip rounded-b-full" />
+                    <div className="w-6 h-8 ganache-drip rounded-b-full" />
+                    <div className="w-4 h-12 ganache-drip rounded-b-full" />
+                    <div className="w-5 h-6 ganache-drip rounded-b-full" />
+                  </div>
+
+                  <div className="pr-4 pb-3 text-right font-romantic text-xl sm:text-2xl text-rose-950 font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
                     Happy B&apos;day
                   </div>
+
+                  {/* Exposed Inner Red Velvet Sponge Wall */}
                   {cakeCut && (
-                    <div className="absolute right-0 top-0 bottom-0 w-2.5 bg-gradient-to-b from-rose-700 via-pink-100 to-rose-700 border-l border-rose-300" />
+                    <div
+                      className="absolute right-0 top-0 bottom-0 w-5 border-l border-rose-300 shadow-inner"
+                      style={{
+                        background:
+                          "repeating-linear-gradient(180deg, #881337 0px, #881337 12px, #fff1f2 12px, #fff1f2 18px)",
+                      }}
+                    />
                   )}
                 </div>
 
-                <div className="w-36 sm:w-48 h-24 bg-gradient-to-b from-rose-400 via-rose-500 to-pink-600 rounded-tl-2xl rounded-bl-xl relative shadow-xl border-t-4 border-l-2 border-pink-200/70 overflow-hidden flex flex-col justify-between">
+                {/* BOTTOM TIER (Left) */}
+                <div className="w-44 sm:w-56 h-28 bg-gradient-to-b from-rose-400 via-rose-600 to-rose-800 rounded-tl-2xl rounded-bl-xl relative tier-3d-lighting border-t-4 border-l border-pink-200/80 overflow-hidden flex flex-col justify-between">
                   <div className="flex justify-evenly -mt-1">
-                    {[1, 2, 3, 4].map((n) => (
+                    {[1, 2, 3, 4, 5].map((n) => (
                       <div
                         key={n}
-                        className="w-6 h-4 bg-pink-100 rounded-b-full shadow-sm"
+                        className="w-7 h-4.5 bg-gradient-to-b from-white via-pink-50 to-pink-200 rounded-b-full shadow-md"
                       />
                     ))}
                   </div>
-                  <div className="pr-2 text-right text-[11px] sm:text-xs font-extrabold tracking-widest text-amber-200 drop-shadow">
+
+                  <div className="pr-4 text-right text-xs sm:text-sm font-extrabold tracking-widest text-amber-200 drop-shadow">
                     05 Nov
                   </div>
-                  <div className="flex justify-around pb-1">
-                    {[1, 2, 3, 4, 5, 6].map((n) => (
+
+                  <div className="flex justify-around pb-1.5 px-2">
+                    {[1, 2, 3, 4, 5, 6, 7].map((n) => (
                       <div
                         key={n}
-                        className="w-2.5 h-2.5 rounded-full bg-amber-200 shadow"
+                        className="w-3 h-3 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-200 to-white shadow-md"
                       />
                     ))}
                   </div>
+
                   {cakeCut && (
-                    <div className="absolute right-0 top-0 bottom-0 w-3 bg-gradient-to-b from-rose-800 via-amber-100 to-rose-900" />
+                    <div
+                      className="absolute right-0 top-0 bottom-0 w-5 border-l border-rose-300 shadow-inner"
+                      style={{
+                        background:
+                          "repeating-linear-gradient(180deg, #7f1d1d 0px, #7f1d1d 14px, #fef2f2 14px, #fef2f2 21px)",
+                      }}
+                    />
                   )}
                 </div>
               </div>
 
-              {/* RIGHT HALF */}
+              {/* ================= RIGHT HALF OF CAKE ================= */}
               <div
                 className={`flex flex-col items-start transition-all duration-1000 ease-out ${
                   cakeCut
-                    ? "translate-x-5 sm:translate-x-10 rotate-3"
+                    ? "translate-x-8 sm:translate-x-12 rotate-2"
                     : "translate-x-0 rotate-0"
                 }`}
               >
-                <div className="w-28 sm:w-36 h-20 bg-gradient-to-b from-pink-200 via-pink-300 to-rose-300 rounded-tr-3xl relative shadow-inner border-t-4 border-r-2 border-white/60 overflow-hidden flex flex-col justify-between">
-                  <div className="flex justify-around items-start">
-                    <div className="w-5 h-7 bg-rose-600 rounded-b-full" />
-                    <div className="w-6 h-5 bg-rose-600 rounded-b-full" />
-                    <div className="w-4 h-8 bg-rose-600 rounded-b-full" />
-                    <div className="w-5 h-6 bg-rose-600 rounded-b-full" />
+                {/* Top Strawberries & Cream Rosettes (Right) */}
+                <div className="flex justify-between items-end w-28 sm:w-36 px-3 -mb-1.5 z-10">
+                  <div className="w-5 h-3.5 rounded-full bg-gradient-to-b from-white to-pink-100 shadow border border-pink-200" />
+                  <div className="w-5 h-6 bg-gradient-to-b from-red-500 to-rose-800 rounded-b-full rounded-t-md relative shadow-md rotate-12">
+                    <div className="w-4 h-1.5 bg-emerald-500 rounded-full absolute -top-1 left-0.5" />
                   </div>
-                  <div className="pl-2 pb-3 text-left font-romantic text-lg sm:text-xl text-rose-900 font-bold drop-shadow-sm">
+                </div>
+
+                {/* TOP TIER (Right) */}
+                <div className="w-32 sm:w-44 h-24 bg-gradient-to-b from-pink-200 via-pink-300 to-rose-400 rounded-tr-[2rem] relative tier-3d-lighting border-t-4 border-r border-white/70 overflow-hidden flex flex-col justify-between">
+                  <div className="flex justify-around items-start">
+                    <div className="w-5 h-9 ganache-drip rounded-b-full" />
+                    <div className="w-6 h-7 ganache-drip rounded-b-full" />
+                    <div className="w-4 h-11 ganache-drip rounded-b-full" />
+                    <div className="w-5 h-8 ganache-drip rounded-b-full" />
+                    <div className="w-4 h-6 ganache-drip rounded-b-full" />
+                  </div>
+
+                  <div className="pl-4 pb-3 text-left font-romantic text-xl sm:text-2xl text-rose-950 font-bold drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
                     Neha ❤️
                   </div>
+
                   {cakeCut && (
-                    <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-b from-rose-700 via-pink-100 to-rose-700 border-r border-rose-300" />
+                    <div
+                      className="absolute left-0 top-0 bottom-0 w-5 border-r border-rose-300 shadow-inner"
+                      style={{
+                        background:
+                          "repeating-linear-gradient(180deg, #881337 0px, #881337 12px, #fff1f2 12px, #fff1f2 18px)",
+                      }}
+                    />
                   )}
                 </div>
 
-                <div className="w-36 sm:w-48 h-24 bg-gradient-to-b from-rose-400 via-rose-500 to-pink-600 rounded-tr-2xl rounded-br-xl relative shadow-xl border-t-4 border-r-2 border-pink-200/70 overflow-hidden flex flex-col justify-between">
+                {/* BOTTOM TIER (Right) */}
+                <div className="w-44 sm:w-56 h-28 bg-gradient-to-b from-rose-400 via-rose-600 to-rose-800 rounded-tr-2xl rounded-br-xl relative tier-3d-lighting border-t-4 border-r border-pink-200/80 overflow-hidden flex flex-col justify-between">
                   <div className="flex justify-evenly -mt-1">
-                    {[1, 2, 3, 4].map((n) => (
+                    {[1, 2, 3, 4, 5].map((n) => (
                       <div
                         key={n}
-                        className="w-6 h-4 bg-pink-100 rounded-b-full shadow-sm"
+                        className="w-7 h-4.5 bg-gradient-to-b from-white via-pink-50 to-pink-200 rounded-b-full shadow-md"
                       />
                     ))}
                   </div>
-                  <div className="pl-2 text-left text-[11px] sm:text-xs font-extrabold tracking-widest text-amber-200 drop-shadow">
+
+                  <div className="pl-4 text-left text-xs sm:text-sm font-extrabold tracking-widest text-amber-200 drop-shadow">
                     2002 ✨
                   </div>
-                  <div className="flex justify-around pb-1">
-                    {[1, 2, 3, 4, 5, 6].map((n) => (
+
+                  <div className="flex justify-around pb-1.5 px-2">
+                    {[1, 2, 3, 4, 5, 6, 7].map((n) => (
                       <div
                         key={n}
-                        className="w-2.5 h-2.5 rounded-full bg-amber-200 shadow"
+                        className="w-3 h-3 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-200 to-white shadow-md"
                       />
                     ))}
                   </div>
+
                   {cakeCut && (
-                    <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-b from-rose-800 via-amber-100 to-rose-900" />
+                    <div
+                      className="absolute left-0 top-0 bottom-0 w-5 border-r border-rose-300 shadow-inner"
+                      style={{
+                        background:
+                          "repeating-linear-gradient(180deg, #7f1d1d 0px, #7f1d1d 14px, #fef2f2 14px, #fef2f2 21px)",
+                      }}
+                    />
                   )}
                 </div>
               </div>
 
+              {/* REALISTIC 3D CUT CAKE WEDGE SLICE ON PORCELAIN PLATE */}
               {cakeCut && (
-                <div className="absolute bottom-8 z-30 flex flex-col items-center animate-bounce">
-                  <div className="px-3 py-1 rounded-full bg-amber-400 text-slate-950 font-bold text-xs shadow-lg">
-                    🍰 First Bite For You!
+                <div className="wedge-serve-anim absolute -bottom-8 z-40 flex flex-col items-center">
+                  <div className="px-3.5 py-1 rounded-full bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 text-slate-950 font-extrabold text-xs shadow-xl border border-white mb-1 animate-bounce">
+                    🍰 Freshly Cut Slice For Queen Neha!
                   </div>
+
+                  {/* Isometric 3D Triangular Cake Wedge SVG */}
+                  <svg
+                    width="150"
+                    height="115"
+                    viewBox="0 0 150 115"
+                    className="drop-shadow-[0_14px_20px_rgba(0,0,0,0.85)] overflow-visible"
+                  >
+                    <defs>
+                      <linearGradient
+                        id="plateRim"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="#fde68a" />
+                        <stop offset="50%" stopColor="#ffffff" />
+                        <stop offset="100%" stopColor="#f59e0b" />
+                      </linearGradient>
+                      <linearGradient
+                        id="topFrosting"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stopColor="#ffe4e6" />
+                        <stop offset="50%" stopColor="#fda4af" />
+                        <stop offset="100%" stopColor="#fb7185" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Luxury Gold-Rimmed Dessert Plate */}
+                    <ellipse
+                      cx="75"
+                      cy="96"
+                      rx="66"
+                      ry="15"
+                      fill="url(#plateRim)"
+                      stroke="#d97706"
+                      strokeWidth="2"
+                    />
+                    <ellipse cx="75" cy="94" rx="54" ry="11" fill="#fff1f2" />
+
+                    {/* Back Outer Curved Crust of the Wedge */}
+                    <path
+                      d="M 105 32 Q 122 38 124 44 L 124 86 Q 114 82 105 76 Z"
+                      fill="#be123c"
+                    />
+
+                    {/* Left Angled Cut Face (Red Velvet & Cream Layers) */}
+                    {/* Layer 1: Red Velvet Sponge */}
+                    <polygon
+                      points="30,54 105,32 105,43 30,65"
+                      fill="#881337"
+                    />
+                    {/* Layer 2: Cream Cheese Filling */}
+                    <polygon
+                      points="30,65 105,43 105,48 30,70"
+                      fill="#fff1f2"
+                    />
+                    {/* Layer 3: Red Velvet Sponge */}
+                    <polygon
+                      points="30,70 105,48 105,59 30,81"
+                      fill="#9f1239"
+                    />
+                    {/* Layer 4: Cream Cheese Filling */}
+                    <polygon
+                      points="30,81 105,59 105,64 30,86"
+                      fill="#fff1f2"
+                    />
+                    {/* Layer 5: Bottom Red Velvet Sponge */}
+                    <polygon
+                      points="30,86 105,64 105,76 30,98"
+                      fill="#881337"
+                    />
+
+                    {/* Right Angled Cut Face (3D Perspective Shading) */}
+                    <polygon
+                      points="30,54 124,44 124,55 30,65"
+                      fill="#6b0f2b"
+                    />
+                    <polygon
+                      points="30,65 124,55 124,60 30,70"
+                      fill="#ffe4e6"
+                    />
+                    <polygon
+                      points="30,70 124,60 124,71 30,81"
+                      fill="#7f1d1d"
+                    />
+                    <polygon
+                      points="30,81 124,71 124,76 30,86"
+                      fill="#ffe4e6"
+                    />
+                    <polygon
+                      points="30,86 124,76 124,86 30,98"
+                      fill="#6b0f2b"
+                    />
+
+                    {/* Triangular Top Pink Frosting Surface */}
+                    <path
+                      d="M 30 54 L 105 32 Q 118 37 124 44 Z"
+                      fill="url(#topFrosting)"
+                      stroke="#fff1f2"
+                      strokeWidth="1"
+                    />
+
+                    {/* Chocolate Ganache Drips on Wedge */}
+                    <path
+                      d="M 55 47 Q 57 56 59 46 M 80 40 Q 82 52 85 39"
+                      stroke="#4c0519"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      fill="none"
+                    />
+
+                    {/* Whipped Cream Swirl & Fresh Strawberry on Top of Slice */}
+                    <ellipse cx="88" cy="36" rx="11" ry="6" fill="#ffffff" />
+                    <path
+                      d="M 88 20 C 80 20 79 34 88 37 C 97 34 96 20 88 20 Z"
+                      fill="#e11d48"
+                    />
+                    <ellipse cx="88" cy="20" rx="6" ry="2" fill="#10b981" />
+
+                    {/* Red Velvet Crumbs on the Plate */}
+                    <circle cx="48" cy="99" r="2" fill="#9f1239" />
+                    <circle cx="55" cy="101" r="1.4" fill="#be123c" />
+                    <circle cx="96" cy="96" r="1.8" fill="#881337" />
+                    <circle cx="68" cy="100" r="1.2" fill="#fbbf24" />
+                  </svg>
                 </div>
               )}
             </div>
 
-            {/* GOLDEN STAND */}
-            <div className="w-80 sm:w-[420px] h-5 bg-gradient-to-r from-amber-500 via-yellow-200 to-amber-500 rounded-full shadow-2xl border border-amber-100 relative z-20" />
-            <div className="w-32 h-5 bg-gradient-to-b from-amber-400 to-amber-700 rounded-b-2xl shadow-lg border-x border-amber-200/50" />
+            {/* 3D METALLIC ROYAL GOLD CAKE STAND */}
+            <div className="w-80 sm:w-[470px] h-6 bg-gradient-to-r from-amber-700 via-yellow-200 to-amber-700 rounded-full shadow-[0_18px_35px_rgba(0,0,0,0.85)] border border-amber-100 relative z-20" />
+            <div className="w-36 h-7 bg-gradient-to-b from-amber-500 via-amber-700 to-amber-950 rounded-b-3xl shadow-2xl border-x border-amber-300/40" />
+            <div className="w-48 h-2.5 bg-gradient-to-r from-amber-800 via-yellow-400 to-amber-800 rounded-full shadow-xl" />
           </div>
         </div>
 
         {/* CUT THE CAKE BUTTON */}
         {allBlown && !cakeCut && (
-          <div className="pt-2 animate-fadeIn">
+          <div className="pt-3 animate-fadeIn">
             <button
               onClick={handleCutCake}
               disabled={isCutting}
-              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-rose-500 to-pink-600 text-white font-bold text-base sm:text-lg shadow-[0_0_25px_rgba(244,63,94,0.6)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 mx-auto cursor-pointer"
+              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-rose-500 to-pink-600 text-white font-bold text-base sm:text-lg shadow-[0_0_30px_rgba(244,63,94,0.7)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 mx-auto cursor-pointer disabled:opacity-75"
             >
               <span>🔪</span>
               <span>
                 {isCutting
-                  ? "Cutting Your Cake, Neha..."
+                  ? cutStep === 1
+                    ? "Making 1st Cut, Neha..."
+                    : "Making 2nd Cut & Serving Slice..."
                   : "Cut Your Birthday Cake, Neha 🎂"}
               </span>
             </button>

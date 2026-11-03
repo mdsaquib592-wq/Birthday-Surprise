@@ -19,7 +19,8 @@ export default function TimelinePage() {
 
   useEffect(() => {
     const startLove = new Date("2019-07-28T00:00:00");
-    const birthDate = new Date("2002-09-05T00:00:00");
+    // FIX: Correct birth date to November 5th (Month 10)
+    const birthDate = new Date("2002-11-05T00:00:00");
 
     const updateClocks = () => {
       const now = new Date();
@@ -32,7 +33,6 @@ export default function TimelinePage() {
 
       if (days < 0) {
         months -= 1;
-        // Exact days in the previous month
         const prevMonthDays = new Date(
           now.getFullYear(),
           now.getMonth(),
@@ -55,18 +55,30 @@ export default function TimelinePage() {
         totalDays,
       });
 
+      // --- Birth Stats Update Logic ---
+
+      // FIX: Get total days alive based on the corrected birthDate
       const totalDaysAlive = Math.floor(
         (now - birthDate) / (1000 * 60 * 60 * 24),
       );
 
-      const isBirthdayToday = now.getMonth() === 8 && now.getDate() === 5;
-      let nextBday = new Date(now.getFullYear(), 8, 5);
-      if (now > nextBday && !isBirthdayToday) {
-        nextBday = new Date(now.getFullYear() + 1, 8, 5);
+      // FIX: Check birthday today based on Month 10 (Nov) and Day 5
+      const isBirthdayToday = now.getMonth() === 10 && now.getDate() === 5;
+
+      // FIX: Correctly calculate the next birthday date for Nov 5th
+      let nextBday = new Date(now.getFullYear(), 10, 5);
+      // If the current date is after this year's Nov 5th, calculate for next year
+      if (now.getTime() > nextBday.getTime() && !isBirthdayToday) {
+        nextBday = new Date(now.getFullYear() + 1, 10, 5);
       }
-      const nextBdayDays = isBirthdayToday
-        ? 0
-        : Math.ceil((nextBday - now) / (1000 * 60 * 60 * 24));
+
+      // Calculate remaining days using Math.floor for consistency,
+      // and add 1 to include the entire current day's duration
+      let nextBdayDays = 0;
+      if (!isBirthdayToday) {
+        const diff = nextBday.getTime() - now.getTime();
+        nextBdayDays = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+      }
 
       setBirthStats({ totalDaysAlive, nextBdayDays, isBirthdayToday });
     };
@@ -76,6 +88,7 @@ export default function TimelinePage() {
     return () => clearInterval(timer);
   }, []);
 
+  // --- Milestones Update ---
   const milestones = [
     {
       date: "05 November 2002",
