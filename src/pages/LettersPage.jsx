@@ -24,6 +24,82 @@ export default function LettersPage() {
       tag: "Always Yours",
       body: "Whenever we are apart and you miss me, just remember that soon enough, once our families bless our marriage, we won’t ever have to say goodbye at the end of the day again.",
     },
+    // --- 15 नए लेटर्स जो पूरी शिद्द्त और दिल से लिखे गए हैं ---
+    {
+      title: "Open When You Are Smiling Because of Me",
+      tag: "Your Beautiful Smile 😊",
+      body: "Seeing you smile is my biggest achievement, Neha. When your face lights up with that cute smile, my whole day becomes perfect. Never let that smile fade away, because it owns my heart.",
+    },
+    {
+      title: "Open When You Feel Low or Sad",
+      tag: "My Comfort Zone 🫂",
+      body: "Meri jaan, agar kabhi tumhe lage ki duniya me tum akeli ho, toh bas aankh band karke mujhe yaad kar lena. Main chahe kahin bhi rahun, tumhara yeh Saquib hamesha tumhare sath hai, tumhara haath pakadne ke liye.",
+    },
+    {
+      title: "Open When You Are Angry With Me",
+      tag: "Sorry My Love 🥺",
+      body: "Mujhe pata hai main kabhi-kabhi tumhe pareshan kar deta hoon ya gussa dila deta hoon, par sach kahun toh tumhare alawa mera koi hai hi nahi jiske samne main ro sakoon ya haq jata sakoon. Please mujhe maaf kar diya karo na!",
+    },
+    {
+      title: "Open When You Look in the Mirror",
+      tag: "Prettiest Girl Alive ✨",
+      body: "Kabhi khud ko shishe me dekho toh yeh mat sochna ki tum mein koi kami hai. Tum duniya ki sabse khoobsurat ladki ho mere liye. Tumhara yeh gussa, yeh nakhre aur yeh masumiyat—sab kuch mere dil ke behad kareeb hai.",
+    },
+    {
+      title: "Open When You Can't Sleep at 2 AM",
+      tag: "Late Night Thoughts 🌙",
+      body: "Raat ke is sannate mein jab sab so rahe hote hain, tab bhi mere khayalon mein sirf tum hoti ho. Sochta hoon ki jab hum dono ka apna ek ghar hoga, toh har raat bina kisi fikar ke sath soyenge.",
+    },
+    {
+      title: "Open When You Eat Your Favorite Food",
+      tag: "Foodie Partner 🍕",
+      body: "Mujhe woh din ka intezaar hai jab hum sath baithkar bina kisi rok-tok ke tumhari pasand ka khana khayenge aur tumhare woh cute se nakhre dekhunga ki tum kya khaogi aur kya nahi!",
+    },
+    {
+      title: "Open When You Feel Insecure About Us",
+      tag: "Lifetime Promise 🤝",
+      body: "Kasam se, maine 28 July 2019 ko jo faisla liya tha, usse piche hatne ka koi sawal hi paida nahi hota. Log kya kehte hain ya halat kaise hain, isse koi fark nahi padta. Mera dil sirf tumhara hai aur hamesha tumhara hi rahega.",
+    },
+    {
+      title: "Open When You Are Overthinking",
+      tag: "Relax My Queen 👑",
+      body: "Faltu ki baatein sochna band karo, meri jaan! Jab tak Saquib zinda hai, tumhe kis baat ki fikar? Hamari kahानी ki happy ending likhi ja chuki hai, bas waqt aane par wo duniya ke samne aayegi.",
+    },
+    {
+      title: "Open When You Need a Tight Hug",
+      tag: "Virtual Warmth 🤗",
+      body: "Apni aakhein band karo aur mehsus karo ki main tumhe kitni kas kar gale lagaye huaye hoon. Tumhari saari thakan, saari pareshaniyan ek pal mein gayab ho jayengi. You are my safe place, Neha.",
+    },
+    {
+      title: "Open When You Are Wearing My Favorite Outfit",
+      tag: "Stunning Look 💫",
+      body: "Tum chahe jo bhi pehno, tum par sab kuch kamaal lagta hai. Par sach kahun toh jab tum simple suit ya saree me hoti ho, toh tum par se meri nazar hi nahi hatti. Kasam se, nazar utarkar kaala tika lagane ka dil karta hai!",
+    },
+    {
+      title: "Open When You Think About Our Future Kids",
+      tag: "Our Little Family 🏡",
+      body: "Sochta hoon jab hamare bachhe honge, toh wo bilkul tumhari tarah pyare aur thode se stubborn honge. Main unhe bataunga ki unki mumma duniya ki sabse strong aur pyari ladki hai.",
+    },
+    {
+      title: "Open When You Remember Our Past Fights",
+      tag: "Growing Stronger 🌱",
+      body: "Humne jitni bhi choti-moti ladaiyan ki hain, unhone hamare rishte ko aur mazboot banaya hai. Tumse ladaai ke baad bhi gussa 5 minute se zyada nahi tik pata, kyunki tumhare bina rehna mere bas ki baat nahi.",
+    },
+    {
+      title: "Open When You Are Proud of Me",
+      tag: "My Motivation 🚀",
+      body: "Main jo kuch bhi kar raha hoon, jo mehnat kar raha hoon, wo sirf isliye taaki main ek din tumhare layak ban sakoon aur tumhe wo har khushi de sakoon ki tum garv se keh sako—'He is my Saquib!'",
+    },
+    {
+      title: "Open When You Feel Like Giving Up",
+      tag: "Stay Strong 💪",
+      body: "Himmat mat harna, meri sherni! Zindagi mein chahe kitni bhi mushkilein aayein, hum dono milkar har ek rukawat ko tod denge. Tum meri taqat ho, aur main tumhari dhal ban kar khada hoon.",
+    },
+    {
+      title: "Open When You Just Want to Hear 'I Love You'",
+      tag: "Endless Love ❤️",
+      body: "I love you, Neha Praveen. Subah ki pehli kiran se lekar raat ke aakhri khyal tak, tum sirf aur sirf tum hi mere dil mein rehti ho. You are my past, my present, and my entire future.",
+    },
   ];
 
   const [selected, setSelected] = useState(null);
@@ -144,7 +220,7 @@ export default function LettersPage() {
                 <span>{selected.tag}</span>
               </div>
 
-              <h3 className="font-romantic text-3xl sm:text-4xl text-amber-950 leading-tight">
+              <h3 className="font-romantic text-3xl sm:text-4xl text-amber-950 leading-text">
                 {selected.title}
               </h3>
             </div>

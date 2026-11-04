@@ -734,11 +734,6 @@ export default function MemoriesPage() {
       {/* ================= HEADER & AUDIO PLAYER ================= */}
       <div className="text-center space-y-4 relative z-10">
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" /> 10 Wall Polaroids + 28 Unseen
-            Photos Inside Diary
-          </div>
-
           <button
             onClick={toggleMemoryAudio}
             className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border shadow-lg ${
@@ -764,11 +759,6 @@ export default function MemoriesPage() {
         <h2 className="font-romantic text-4xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-pink-300 to-rose-400 drop-shadow">
           Our Polaroid Wall 📸
         </h2>
-        <p className="text-slate-300 text-sm max-w-xl mx-auto">
-          Yahan humari <strong>10 Highlight Polaroids</strong> hain. Iske alawa{" "}
-          <strong>28 bilkul nayi unseen photos</strong> meri handwritten diary
-          me band hain—neeche diary khol kar dekho! ✨
-        </p>
 
         {/* Category Filter Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
@@ -842,19 +832,9 @@ export default function MemoriesPage() {
       <div className="relative z-10 pt-8">
         <div className="p-6 sm:p-10 rounded-3xl border-2 border-amber-500/50 bg-gradient-to-r from-[#2a0810] via-[#3b0d18] to-[#230903] shadow-[0_20px_50px_rgba(0,0,0,0.85)] flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left relative overflow-hidden">
           <div className="space-y-2 max-w-xl relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300/40 text-amber-200 text-xs font-bold">
-              <Feather className="w-3.5 h-3.5" /> 28 Exclusive New Photos
-              (diary1.jpg - diary28.jpg)
-            </div>
             <h3 className="font-romantic text-3xl sm:text-5xl text-amber-200 drop-shadow">
               Saquib&apos;s Secret Leather Diary For Neha 📖✨
             </h3>
-            <p className="text-amber-100/80 text-sm leading-relaxed">
-              Is diary ke andar bahar wali ek bhi photo nahi hai! Isme{" "}
-              <strong>28 bilkul nayi photos</strong> vintage photo-corners me
-              lagi hain aur har panne par mere haath se likhe{" "}
-              <strong>pyare notes</strong> hain.
-            </p>
           </div>
 
           <button
